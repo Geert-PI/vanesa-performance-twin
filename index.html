@@ -209,18 +209,17 @@ document.getElementById('matchForm').addEventListener('submit',e=>{
 function openWhatsApp(text){window.location.href='https://wa.me/31683601248?text='+encodeURIComponent(text);}
 function shareTraining(){
  const e=trainingEntry();
- const eventId='VANESA-TR-'+new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14);
- const human=['Vanesa — Training · '+new Date().toLocaleDateString('nl-NL'),
-  'Duur '+e.exposure.minutes+' min · Belasting '+e.exposure.perceivedLoad+' · Lichaam '+e.exposure.body,
-  'Onder druk '+e.reflection.pressure+' · 1v1 '+e.reflection.oneVOne+' · Na 1v1 '+e.reflection.afterOneVOne,
-  'Schotkans '+e.reflection.chanceRecognition+' · Afmaken '+e.reflection.finishing,
-  'Volgende ontwikkelkans: '+e.nextOpportunity];
- const compact='TWIN|id='+eventId+'|type=TR|ts='+e.createdAt+
-  '|min='+e.exposure.minutes+'|load='+e.exposure.perceivedLoad+'|body='+e.exposure.body+
-  '|pressure='+e.reflection.pressure+'|1v1='+e.reflection.oneVOne+'|after1v1='+e.reflection.afterOneVOne+
-  '|chance='+e.reflection.chanceRecognition+'|finish='+e.reflection.finishing+
-  '|next='+e.nextOpportunity+'|source=athlete_input';
- const msg=human.concat(['',compact]).join('\n');
+ const eventId='VTR'+new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14);
+ const msg=[
+  'Vanesa Training '+new Date().toLocaleDateString('nl-NL'),
+  e.exposure.minutes+' min | '+e.exposure.perceivedLoad+' | '+e.exposure.body,
+  'Druk '+e.reflection.pressure+' | 1v1 '+e.reflection.oneVOne+' | na1v1 '+e.reflection.afterOneVOne+
+  ' | kans '+e.reflection.chanceRecognition+' | afmaken '+e.reflection.finishing,
+  'Volgende: '+e.nextOpportunity,
+  'TWIN|'+eventId+'|TR|'+e.exposure.minutes+'|'+e.exposure.perceivedLoad+'|'+e.exposure.body+'|'+
+  e.reflection.pressure+'|'+e.reflection.oneVOne+'|'+e.reflection.afterOneVOne+'|'+
+  e.reflection.chanceRecognition+'|'+e.reflection.finishing+'|'+e.nextOpportunity
+ ].join('\n');
  saveEntry(e);
  resetTraining();
  openWhatsApp(msg);
@@ -228,22 +227,17 @@ function shareTraining(){
 
 function shareMatch(){
  const e=matchEntry(),p=e.performance;
- const eventId='VANESA-MA-'+new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14);
+ const eventId='VMA'+new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14);
  const pct=p.shotConversion===null?'—':p.shotConversion+'%';
- const human=['Vanesa — Wedstrijd · '+new Date().toLocaleDateString('nl-NL'),
-  'Performance: '+p.goals+'/'+p.shots+' ('+pct+') · 1v1 '+p.oneVOneWon+'W/'+p.oneVOneLost+'V · Assists '+p.assists,
-  'Balverlies '+p.turnovers+' · Ballen veroverd '+p.ballsRecovered+' · 2 min '+p.twoMinutePenalties,
-  'Onder druk '+e.reflection.pressure+' · Na 1v1 '+e.reflection.afterOneVOne,
-  'Schotkans '+e.reflection.chanceRecognition+' · Afmaken '+e.reflection.finishing,
-  'Volgende ontwikkelkans: '+e.nextOpportunity];
- const compact='TWIN|id='+eventId+'|type=MA|ts='+e.createdAt+
-  '|shots='+p.shots+'|goals='+p.goals+'|conv='+(p.shotConversion===null?'':p.shotConversion)+
-  '|1v1w='+p.oneVOneWon+'|1v1l='+p.oneVOneLost+'|ast='+p.assists+'|to='+p.turnovers+
-  '|rec='+p.ballsRecovered+'|2m='+p.twoMinutePenalties+
-  '|pressure='+e.reflection.pressure+'|after1v1='+e.reflection.afterOneVOne+
-  '|chance='+e.reflection.chanceRecognition+'|finish='+e.reflection.finishing+
-  '|next='+e.nextOpportunity+'|source=athlete_reported_performance';
- const msg=human.concat(['',compact]).join('\n');
+ const msg=[
+  'Vanesa Wedstrijd '+new Date().toLocaleDateString('nl-NL'),
+  p.goals+'/'+p.shots+' '+pct+' | 1v1 '+p.oneVOneWon+'W/'+p.oneVOneLost+'V | A '+p.assists+' | BV '+p.turnovers+' | V '+p.ballsRecovered+' | 2m '+p.twoMinutePenalties,
+  'Druk '+e.reflection.pressure+' | na1v1 '+e.reflection.afterOneVOne+' | kans '+e.reflection.chanceRecognition+' | afmaken '+e.reflection.finishing,
+  'Volgende: '+e.nextOpportunity,
+  'TWIN|'+eventId+'|MA|'+p.shots+'|'+p.goals+'|'+(p.shotConversion===null?'':p.shotConversion)+'|'+
+  p.oneVOneWon+'|'+p.oneVOneLost+'|'+p.assists+'|'+p.turnovers+'|'+p.ballsRecovered+'|'+p.twoMinutePenalties+'|'+
+  e.reflection.pressure+'|'+e.reflection.afterOneVOne+'|'+e.reflection.chanceRecognition+'|'+e.reflection.finishing+'|'+e.nextOpportunity
+ ].join('\n');
  saveEntry(e);
  resetMatch();
  openWhatsApp(msg);
